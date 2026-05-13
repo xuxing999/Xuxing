@@ -19,9 +19,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Mobile override */
+/* Mobile: full viewport, no scroll — orbit animation fills the screen */
 @media (max-width: 767px) {
   html, body {
-    overflow: auto;
+    overflow: hidden;
+    height: 100%;
+    position: fixed;
+    width: 100%;
   }
 }
