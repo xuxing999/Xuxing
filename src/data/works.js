@@ -9,4 +9,9 @@ export const works = [
   { id: 8,  emoji: "🔮", title: "作品八", desc: "作品描述佔位文字", url: "#", color: "#534AB7" },
   { id: 9,  emoji: "📱", title: "作品九", desc: "作品描述佔位文字", url: "#", color: "#BA7517" },
   { id: 10, emoji: "🗺️", title: "作品十", desc: "作品描述佔位文字", url: "#", color: "#E24B4A" },
+  // Coming soon — 佔位卡，讓旋轉保持無縫，之後替換成真實作品
+  { id: 11, emoji: "✦", title: "Coming Soon", desc: "即將推出的 AI 作品", url: "#", color: "#a09890" },
+  { id: 12, emoji: "✦", title: "Coming Soon", desc: "即將推出的 AI 作品", url: "#", color: "#a09890" },
+  { id: 13, emoji: "✦", title: "Coming Soon", desc: "即將推出的 AI 作品", url: "#", color: "#a09890" },
+  { id: 14, emoji: "✦", title: "Coming Soon", desc: "即將推出的 AI 作品", url: "#", color: "#a09890" },
 ];

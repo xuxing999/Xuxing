@@ -12,11 +12,13 @@ const CARD_SIZE_END  = 112                // largest (at arc sides/bottom)
 const CARD_HOVER_MAX = 152
 const INFLUENCE      = 120
 
-// Distribute cards across the VISIBLE upper arc only.
-// With slow rotation, 1-2 cards drift off one side while others enter from the opposite side.
-// This keeps 8-10 cards visible at all times, matching the reference design.
-const START_ANGLE = Math.PI + 0.1
-const END_ANGLE   = 2 * Math.PI - 0.1
+// Cards span 220° of the full circle (apex ± 110°).
+// Gap = 360° − 220° = 140°, which is smaller than the ~164° visible window,
+// so the gap is always hidden in the fog zone — rotation is seamless.
+const APEX        = 3 * Math.PI / 2               // 270° = topmost point
+const HALF_SPAN   = 110 * (Math.PI / 180)         // 110° in radians
+const START_ANGLE = APEX - HALF_SPAN              // ≈ 160°
+const END_ANGLE   = APEX + HALF_SPAN              // ≈ 380° (= 20°)
 const BASE_ANGLES = works.map((_, i) => START_ANGLE + i * (END_ANGLE - START_ANGLE) / (N - 1))
 
 // Stable per-card wobble: ±8° on top of tangent rotation
@@ -35,7 +37,7 @@ function getArc(vw, vh) {
   return {
     arcCX: vw / 2,
     arcCY: vh * 0.87,
-    R: Math.min(vh * 0.73, vw * 0.45),
+    R: Math.min(vh * 0.62, vw * 0.38),
   }
 }
 
