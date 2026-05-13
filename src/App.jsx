@@ -38,7 +38,7 @@ function getArc(vw, vh, isMobile) {
   if (isMobile) {
     return {
       arcCX: vw / 2,
-      arcCY: vh * 0.42,
+      arcCY: vh * 0.50,
       R: vw * 0.55,   // intentionally larger than screen — cards bleed off edges
     }
   }
@@ -76,7 +76,7 @@ export default function App() {
   const [vh, setVh] = useState(() => window.innerHeight)
   const [vw, setVw] = useState(() => window.innerWidth)
 
-  const avatarY = isMobile ? vh * 0.42 : vh * 0.63
+  const avatarY = isMobile ? vh * 0.50 : vh * 0.63
 
   // Resize
   useEffect(() => {
@@ -252,9 +252,23 @@ export default function App() {
         {!isMobile && <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 10, letterSpacing: '2.5px', color: '#666' }}>XUXING LAB — AI WORKS</div>}
       </div>
 
-      {/* Bottom fog gradient — z above cards, below panel */}
+      {/* Bottom fog gradient — desktop always, mobile only when preview panel is open */}
       {!isMobile && (
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 240, zIndex: 11, pointerEvents: 'none', background: 'linear-gradient(to top, #eeecea 0%, #eeecead8 20%, transparent 100%)' }} />
+      )}
+      {isMobile && (
+        <div style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 260,
+          zIndex: 18,
+          pointerEvents: 'none',
+          background: 'linear-gradient(to top, #eeecea 0%, #eeecead0 30%, transparent 100%)',
+          opacity: previewVisible ? 1 : 0,
+          transition: 'opacity 0.38s cubic-bezier(0.4,0,0.2,1)',
+        }} />
       )}
 
       {/* Hint label */}
