@@ -315,16 +315,16 @@ function PreviewPanel({ work, visible, isMobile }) {
         gap: isMobile ? 14 : 20,
       }}
     >
-      {/* White fog above panel — fully opaque at bottom so rounded corners seal cleanly */}
+      {/* White fog above panel — tall slow fade, like drifting smoke */}
       {isMobile && (
         <div style={{
           position: 'absolute',
-          top: -64,
+          top: -160,
           left: 0,
           right: 0,
-          height: 64,
+          height: 160,
           pointerEvents: 'none',
-          background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.38) 55%, rgba(255,255,255,1) 100%)',
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.18) 38%, rgba(255,255,255,0.42) 58%, rgba(255,255,255,0.75) 78%, rgba(255,255,255,1) 100%)',
         }} />
       )}
       {work && (<>
