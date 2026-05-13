@@ -11,15 +11,9 @@ const CARD_SIZE_END  = 112                // largest (at arc sides/bottom)
 const CARD_HOVER_MAX = 152
 const INFLUENCE      = 120
 
-// Desktop: cards span 220° of the full circle (apex ± 110°).
-// Gap = 360° − 220° = 140°, which is smaller than the ~164° visible window.
+// Desktop: full 360° orbit, evenly spaced (bottom cards hidden by fog gradient)
 const APEX        = 3 * Math.PI / 2
-const HALF_SPAN   = 110 * (Math.PI / 180)
-const START_ANGLE = APEX - HALF_SPAN
-const END_ANGLE   = APEX + HALF_SPAN
-const BASE_ANGLES_DESKTOP = works.map((_, i) =>
-  START_ANGLE + i * (END_ANGLE - START_ANGLE) / (N - 1)
-)
+const BASE_ANGLES_DESKTOP = works.map((_, i) => i * (2 * Math.PI / N))
 
 // Mobile: full 360° orbit, evenly spaced
 const BASE_ANGLES_MOBILE = works.map((_, i) => i * (2 * Math.PI / N))
@@ -247,7 +241,7 @@ export default function App() {
 
       {/* Avatar + brand */}
       <div style={{ position: 'absolute', left: '50%', top: avatarY, transform: 'translate(-50%,-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 15, userSelect: 'none' }}>
-        <div style={{ width: 80, height: 80, borderRadius: '50%', background: '#e05a2b', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, boxShadow: '0 4px 24px rgba(224,90,43,0.28)' }}><PersonSVG /></div>
+        <img src="/Avatar.png" alt="avatar" style={{ width: 108, height: 108, borderRadius: '50%', objectFit: 'cover', marginBottom: 14, boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }} />
         <div style={{ fontFamily: "'DM Sans',sans-serif", fontWeight: 700, fontSize: 16, letterSpacing: '3px', color: '#111', marginBottom: 6 }}>煦行</div>
         {!isMobile && <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 10, letterSpacing: '2.5px', color: '#666' }}>XUXING LAB — AI WORKS</div>}
       </div>
