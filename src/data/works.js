@@ -1,3 +1,5 @@
+// image 欄位（選填）：把圖片放進 public/works/ 資料夾後填路徑，例如 "/works/project1.png"
+// 沒有 image 時自動 fallback 顯示 emoji
 export const works = [
   { id: 1,  emoji: "🎵", title: "作品一", desc: "作品描述佔位文字", url: "#", color: "#c8f000" },
   { id: 2,  emoji: "🏠", title: "作品二", desc: "作品描述佔位文字", url: "#", color: "#e05a2b" },

@@ -158,8 +158,13 @@ export default function App() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, padding: '0 24px' }}>
           {works.map((work, i) => (
             <div key={work.id} onClick={() => handleCardClick(work.url)}
-              style={{ background: hexToRgba(work.color, 0.15), borderRadius: 16, aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36, cursor: work.url !== '#' ? 'pointer' : 'default', transform: `rotate(${WOBBLE[i] * 0.5}deg)`, transition: 'transform 0.2s ease', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
-            >{work.emoji}</div>
+              style={{ background: hexToRgba(work.color, 0.15), borderRadius: 16, aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: work.image ? 0 : 36, overflow: 'hidden', cursor: work.url !== '#' ? 'pointer' : 'default', transform: `rotate(${WOBBLE[i] * 0.5}deg)`, transition: 'transform 0.2s ease', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+            >
+              {work.image
+                ? <img src={work.image} alt={work.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                : work.emoji
+              }
+            </div>
           ))}
         </div>
         <div style={{ textAlign: 'center', marginTop: 40, fontFamily: "'DM Sans',sans-serif", fontSize: 10, letterSpacing: '3px', color: '#aaa' }}>TAP TO VISIT</div>
@@ -184,9 +189,10 @@ export default function App() {
         const { x, y, baseSize, rotation, scale } = s
         const size   = baseSize * scale
         const zIndex = Math.round(scale * 10) + 1
+        const work   = works[i]
         return (
-          <div key={works[i].id}
-            onClick={() => handleCardClick(works[i].url)}
+          <div key={work.id}
+            onClick={() => handleCardClick(work.url)}
             style={{
               position: 'absolute',
               left: x - size / 2,
@@ -194,18 +200,24 @@ export default function App() {
               width:  size,
               height: size,
               borderRadius: Math.round(size * 0.19),
-              background: hexToRgba(works[i].color, 0.20),
+              background: hexToRgba(work.color, 0.20),
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: size * 0.43,
+              fontSize: work.image ? 0 : size * 0.43,
+              overflow: 'hidden',
               transform: `rotate(${rotation}deg)`,
               zIndex,
-              cursor: works[i].url !== '#' ? 'pointer' : 'default',
+              cursor: work.url !== '#' ? 'pointer' : 'default',
               willChange: 'left, top, width, height',
               boxShadow: scale > 1.15
                 ? `0 ${Math.round(6 * scale)}px ${Math.round(20 * scale)}px rgba(0,0,0,0.13)`
                 : '0 2px 10px rgba(0,0,0,0.07)',
             }}
-          >{works[i].emoji}</div>
+          >
+            {work.image
+              ? <img src={work.image} alt={work.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }} />
+              : work.emoji
+            }
+          </div>
         )
       })}
 
@@ -243,7 +255,12 @@ function PreviewPanel({ work, visible }) {
   return (
     <div style={{ position: 'fixed', bottom: 0, left: '50%', transform: `translateX(-50%) translateY(${visible ? '0%' : '110%'})`, width: 560, background: '#fff', borderRadius: '16px 16px 0 0', padding: '24px 28px', zIndex: 20, transition: 'transform 0.38s cubic-bezier(0.4,0,0.2,1)', opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none', boxShadow: '0 -8px 40px rgba(0,0,0,0.10)', display: 'flex', alignItems: 'center', gap: 20 }}>
       {work && (<>
-        <div style={{ width: 72, height: 72, borderRadius: 14, flexShrink: 0, background: hexToRgba(work.color, 0.18), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>{work.emoji}</div>
+        <div style={{ width: 72, height: 72, borderRadius: 14, flexShrink: 0, background: hexToRgba(work.color, 0.18), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: work.image ? 0 : 32, overflow: 'hidden' }}>
+          {work.image
+            ? <img src={work.image} alt={work.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            : work.emoji
+          }
+        </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 9, letterSpacing: '2.5px', color: '#aaa', marginBottom: 6, fontWeight: 500 }}>PREVIEWING</div>
           <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: 20, color: '#111', marginBottom: 4, lineHeight: 1.2 }}>{work.title}</div>
