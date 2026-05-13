@@ -256,20 +256,6 @@ export default function App() {
       {!isMobile && (
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 240, zIndex: 11, pointerEvents: 'none', background: 'linear-gradient(to top, #eeecea 0%, #eeecead8 20%, transparent 100%)' }} />
       )}
-      {isMobile && (
-        <div style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 260,
-          zIndex: 18,
-          pointerEvents: 'none',
-          background: 'linear-gradient(to top, #eeecea 0%, #eeecead0 30%, transparent 100%)',
-          opacity: previewVisible ? 1 : 0,
-          transition: 'opacity 0.38s cubic-bezier(0.4,0,0.2,1)',
-        }} />
-      )}
 
       {/* Hint label */}
       <div style={{
@@ -329,6 +315,18 @@ function PreviewPanel({ work, visible, isMobile }) {
         gap: isMobile ? 14 : 20,
       }}
     >
+      {/* White fog that bleeds upward from the panel top edge (mobile only) */}
+      {isMobile && (
+        <div style={{
+          position: 'absolute',
+          top: -110,
+          left: 0,
+          right: 0,
+          height: 110,
+          pointerEvents: 'none',
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.55) 50%, rgba(255,255,255,0.92) 100%)',
+        }} />
+      )}
       {work && (<>
         {/* Drag handle on mobile */}
         {isMobile && (
