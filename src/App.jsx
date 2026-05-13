@@ -302,7 +302,7 @@ function PreviewPanel({ work, visible, isMobile }) {
         transform: `translateX(-50%) translateY(${visible ? '0%' : '110%'})`,
         width: isMobile ? '100%' : 560,
         background: '#fff',
-        borderRadius: isMobile ? '20px 20px 0 0' : '16px 16px 0 0',
+        borderRadius: isMobile ? '0' : '16px 16px 0 0',
         padding: isMobile ? '20px 24px 32px' : '24px 28px',
         zIndex: 20,
         transition: 'transform 0.38s cubic-bezier(0.4,0,0.2,1)',
