@@ -39,7 +39,7 @@ function getArc(vw, vh, isMobile) {
     return {
       arcCX: vw / 2,
       arcCY: vh * 0.42,
-      R: Math.min(vw * 0.35, vh * 0.28),
+      R: vw * 0.55,   // intentionally larger than screen — cards bleed off edges
     }
   }
   return {
@@ -50,7 +50,7 @@ function getArc(vw, vh, isMobile) {
 }
 
 function cardBaseSize(angle, isMobile) {
-  if (isMobile) return 54
+  if (isMobile) return 68
   const norm     = ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)
   const diff     = Math.abs(norm - APEX_ANGLE)
   const circDiff = Math.min(diff, 2 * Math.PI - diff)
