@@ -10,10 +10,10 @@
 
 export const works = [
 
-  // ── 真實作品（共 8 個，依序填入）────────────────────────────────────────
+  // ── 真實作品 ────────────────────────────────────────────────────────────
   {
     id: 1,
-    emoji: "📈",
+    image: "/works/wheel-strategy.png",
     title: "美股期權 Wheel Strategy 收租追蹤器",
     desc: "專為 Wheel Strategy 設計的隱私優先追蹤工具，免帳號、零伺服器，即刻掌握美股收租績效。",
     url: "https://wheel-strategy-nine.vercel.app",
@@ -29,7 +29,7 @@ export const works = [
   },
   {
     id: 3,
-    emoji: "💚",
+    image: "/works/i-am-fine.png",
     title: "我很好",
     desc: "專為獨居長輩打造的數位報平安橋樑，用最不打擾的方式傳遞關懷，讓長輩自在、子女安心。",
     url: "https://i-am-fine.vercel.app",
@@ -37,7 +37,7 @@ export const works = [
   },
   {
     id: 4,
-    emoji: "🎬",
+    image: "/works/cinematch.png",
     title: "影伴 (CineMatch)",
     desc: "快閃式觀影同好媒合平台，訊息 24 小時自動銷毀，不論分票、徵友或映後討論都能精準找伴。",
     url: "https://cinematch-gamma-flame.vercel.app",
@@ -45,27 +45,27 @@ export const works = [
   },
   {
     id: 5,
-    emoji: "✦",
-    title: "Coming Soon",
-    desc: "即將推出的 AI 作品",
-    url: "#",
-    color: "#a09890",
+    image: "/works/tsla-options.png",
+    title: "TSLA 期權收租",
+    desc: "以特斯拉期權為核心的收租策略工具，讓每一張 TSLA 部位都能發揮最大保值效益。",
+    url: "https://tesla-insurance.vercel.app",
+    color: "#E31937",
   },
   {
     id: 6,
-    emoji: "✦",
-    title: "Coming Soon",
-    desc: "即將推出的 AI 作品",
-    url: "#",
-    color: "#a09890",
+    image: "/works/apple-motion.png",
+    title: "Apple 動效展示",
+    desc: "以純前端技術重現 Apple 官網招牌視差與滾動動效，逐格拆解產品登場的每一幀細節。",
+    url: "https://superawei.github.io/Apple_product/",
+    color: "#1d1d1f",
   },
   {
     id: 7,
-    emoji: "✦",
-    title: "Coming Soon",
-    desc: "即將推出的 AI 作品",
-    url: "#",
-    color: "#a09890",
+    image: "/works/taiwan-peaks.png",
+    title: "收集百岳",
+    desc: "台灣百岳登頂記錄平台，用互動地圖標記每一座征服的山頭，留下屬於你的山岳足跡。",
+    url: "https://peak-collector-qchi.vercel.app/login",
+    color: "#1B72BE",
   },
   {
     id: 8,
