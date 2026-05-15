@@ -272,7 +272,7 @@ export default function App() {
 
       {/* Avatar + brand */}
       <div style={{ position: 'absolute', left: '50%', top: avatarY, transform: 'translate(-50%,-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 15, userSelect: 'none' }}>
-        <img src="/Avatar.png" alt="avatar" style={{ width: 108, height: 108, borderRadius: '50%', objectFit: 'cover', marginBottom: 14, boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }} />
+        <img src="/Avatar.jpg" alt="avatar" style={{ width: 108, height: 108, borderRadius: '50%', objectFit: 'cover', marginBottom: 14, boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }} />
         <img src="/xuxing-signature.png" alt="煦行" style={{ width: 110, height: 'auto', mixBlendMode: 'multiply', marginBottom: 4, pointerEvents: 'none' }} />
         {!isMobile && <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 10, letterSpacing: '2.5px', color: '#666' }}>XUXING LAB — AI WORKS</div>}
       </div>
