@@ -1,9 +1,10 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
-import { works } from './data/works.js'
+import { gallery } from './data/gallery.js'
+import Lightbox from './Lightbox.jsx'
 import SignatureBackground from './SignatureBackground.jsx'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-const N              = works.length
+const N              = gallery.length
 const ROT_SPEED      = 0.0008
 const APEX_ANGLE     = 3 * Math.PI / 2    // 270° = topmost point in CSS coords
 const CARD_SIZE_APEX = 72                 // smallest (at arc top)
@@ -13,13 +14,13 @@ const INFLUENCE      = 120
 
 // Desktop: full 360° orbit, evenly spaced (bottom cards hidden by fog gradient)
 const APEX        = 3 * Math.PI / 2
-const BASE_ANGLES_DESKTOP = works.map((_, i) => i * (2 * Math.PI / N))
+const BASE_ANGLES_DESKTOP = gallery.map((_, i) => i * (2 * Math.PI / N))
 
 // Mobile: full 360° orbit, evenly spaced
-const BASE_ANGLES_MOBILE = works.map((_, i) => i * (2 * Math.PI / N))
+const BASE_ANGLES_MOBILE = gallery.map((_, i) => i * (2 * Math.PI / N))
 
 // Stable per-card wobble: ±8° on top of tangent rotation
-const WOBBLE = works.map((_, i) => ((i * 173.31 + 17) % 16) - 8)
+const WOBBLE = gallery.map((_, i) => ((i * 173.31 + 17) % 16) - 8)
 
 function hexToRgba(hex, alpha) {
   const r = parseInt(hex.slice(1, 3), 16)
@@ -61,7 +62,7 @@ export default function App() {
   const arcRef      = useRef(getArc(window.innerWidth, window.innerHeight, isMobileRef.current))
   const prevTsRef   = useRef(null)
 
-  const [cardStates, setCardStates] = useState(() => works.map(() => ({
+  const [cardStates, setCardStates] = useState(() => gallery.map(() => ({
     x: 0, y: 0, baseSize: 80, rotation: 0, scale: 1,
   })))
   const [previewWork,    setPreviewWork]    = useState(null)
@@ -69,6 +70,7 @@ export default function App() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
   const [vh, setVh] = useState(() => window.innerHeight)
   const [vw, setVw] = useState(() => window.innerWidth)
+  const [lightboxItem, setLightboxItem] = useState(null)
 
   const avatarY = isMobile ? vh * 0.50 : vh * 0.63
 
@@ -112,7 +114,7 @@ export default function App() {
 
       let closestIdx = null, closestDist = mobile ? Infinity : 55
 
-      const next = works.map((_, i) => {
+      const next = gallery.map((_, i) => {
         const angle    = baseAngles[i] + rotOff
         const x        = arcCX + R * Math.cos(angle)
         const y        = arcCY + R * Math.sin(angle)
@@ -135,7 +137,7 @@ export default function App() {
       setCardStates(next)
       if (!mobile) {
         if (closestIdx !== null) {
-          setPreviewWork(works[closestIdx])
+          setPreviewWork(gallery[closestIdx])
           setPreviewVisible(true)
         } else {
           setPreviewVisible(false)
@@ -150,16 +152,16 @@ export default function App() {
   }, [])
 
   const handleCardClick = (work) => {
+    if (!work.image && !work.video) return   // skip empty placeholder cards
     if (isMobile) {
-      // On mobile: tap to preview; if already previewing this work, navigate
       if (previewWork?.id === work.id && previewVisible) {
-        if (work.url && work.url !== '#') window.open(work.url, '_blank', 'noopener,noreferrer')
+        setLightboxItem(work)
       } else {
         setPreviewWork(work)
         setPreviewVisible(true)
       }
     } else {
-      if (work.url && work.url !== '#') window.open(work.url, '_blank', 'noopener,noreferrer')
+      setLightboxItem(work)
     }
   }
 
@@ -199,7 +201,7 @@ export default function App() {
         const { x, y, baseSize, rotation, scale } = s
         const size   = baseSize * scale
         const zIndex = Math.round(scale * 10) + 1
-        const work   = works[i]
+        const work   = gallery[i]
 
         // On mobile, fade out cards behind the avatar area
         const isActive = isMobile
@@ -267,11 +269,17 @@ export default function App() {
         userSelect: 'none',
         pointerEvents: 'none',
       }}>
-        {isMobile ? 'TAP TO PREVIEW · TAP AGAIN TO VISIT' : 'HOVER TO PREVIEW · CLICK TO VISIT'}
+        {isMobile ? 'TAP TO PREVIEW · TAP AGAIN TO VIEW' : 'HOVER TO PREVIEW · CLICK TO VIEW'}
       </div>
 
       {/* Preview panel */}
-      <PreviewPanel work={previewWork} visible={previewVisible} isMobile={isMobile} />
+      <PreviewPanel
+        work={previewWork}
+        visible={previewVisible}
+        isMobile={isMobile}
+        onView={(work) => setLightboxItem(work)}
+      />
+      <Lightbox item={lightboxItem} onClose={() => setLightboxItem(null)} />
     </div>
   )
 }
@@ -285,7 +293,7 @@ function PersonSVG() {
   )
 }
 
-function PreviewPanel({ work, visible, isMobile }) {
+function PreviewPanel({ work, visible, isMobile, onView }) {
   return (
     <div
       onClick={e => e.stopPropagation()}
@@ -336,12 +344,30 @@ function PreviewPanel({ work, visible, isMobile }) {
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 9, letterSpacing: '2.5px', color: '#aaa', marginBottom: 4, fontWeight: 500 }}>PREVIEWING</div>
             <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: isMobile ? 18 : 20, color: '#111', marginBottom: 3, lineHeight: 1.2 }}>{work.title}</div>
-            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: '#777', marginBottom: isMobile ? 10 : 12, fontWeight: 300 }}>{work.desc}</div>
-            <a href={work.url !== '#' ? work.url : undefined} target="_blank" rel="noopener noreferrer"
-              onClick={e => { if (work.url === '#') e.preventDefault() }}
-              style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 11, letterSpacing: '1.5px', color: work.color, fontWeight: 600, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, opacity: work.url === '#' ? 0.4 : 1 }}>
-              VISIT PROJECT ↗
-            </a>
+            {work.meta && (
+              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: '#777', marginBottom: isMobile ? 10 : 12, fontWeight: 300 }}>{work.meta}</div>
+            )}
+            {(work.image || work.video) && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onView(work) }}
+                style={{
+                  fontFamily: "'DM Sans',sans-serif",
+                  fontSize: 11,
+                  letterSpacing: '1.5px',
+                  color: work.color,
+                  fontWeight: 600,
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                }}
+              >
+                VIEW ↗
+              </button>
+            )}
           </div>
         </div>
       </>)}
