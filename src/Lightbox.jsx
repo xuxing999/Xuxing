@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 
 export default function Lightbox({ item, onClose }) {
-  const [imgLoaded, setImgLoaded]   = useState(false)
-  const [closing,   setClosing]     = useState(false)
-  const closeRef                    = useRef(null)
+  // Track which item id has finished loading — avoids cached-image race condition
+  const [loadedItemId, setLoadedItemId] = useState(null)
+  const imgLoaded = loadedItemId === item?.id
+  const [closing,  setClosing]          = useState(false)
+  const closeRef                        = useRef(null)
 
   // Triggered close — play exit animation then call onClose
   const handleClose = useCallback(() => {
@@ -22,9 +24,8 @@ export default function Lightbox({ item, onClose }) {
     return () => { document.body.style.overflow = prev }
   }, [item])
 
-  // Escape key + reset imgLoaded on item change + focus close button
+  // Escape key + focus close button on item change
   useEffect(() => {
-    setImgLoaded(false)
     if (!item) return
     const handler = (e) => { if (e.key === 'Escape') handleClose() }
     window.addEventListener('keydown', handler)
@@ -102,7 +103,7 @@ export default function Lightbox({ item, onClose }) {
           <img
             src={item.image}
             alt={item.title}
-            onLoad={() => setImgLoaded(true)}
+            onLoad={() => setLoadedItemId(item.id)}
             style={{
               width: '100%',
               display: 'block',
