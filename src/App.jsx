@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ImagePlus } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { gallery } from './data/gallery.js'
 import Lightbox from './Lightbox.jsx'
@@ -262,7 +262,7 @@ export default function App() {
               >
                 {work.image
                   ? <img src={work.image} alt={work.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }} />
-                  : work.emoji
+                  : <ImagePlus size={Math.round(size * 0.3)} color="rgba(0,0,0,0.22)" strokeWidth={1.5} />
                 }
               </div>
             </motion.div>
@@ -371,8 +371,12 @@ function PreviewPanel({ work, visible, isMobile, onView }) {
             }
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 9, letterSpacing: '2.5px', color: '#aaa', marginBottom: 4, fontWeight: 500 }}>PREVIEWING</div>
-            <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: isMobile ? 18 : 20, color: '#111', marginBottom: 3, lineHeight: 1.2 }}>{work.title}</div>
+            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 9, letterSpacing: '2.5px', color: '#aaa', marginBottom: 4, fontWeight: 500 }}>
+              {work.image || work.video ? 'PREVIEWING' : 'COMING SOON'}
+            </div>
+            <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: isMobile ? 18 : 20, color: work.title ? '#111' : '#bbb', marginBottom: 3, lineHeight: 1.2 }}>
+              {work.title || 'More on the way'}
+            </div>
             {work.desc && (
               <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: '#777', marginBottom: isMobile ? 10 : 12, fontWeight: 300, lineHeight: 1.6 }}>{work.desc}</div>
             )}
