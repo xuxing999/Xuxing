@@ -45,7 +45,7 @@ export const gallery = [
   {
     id: 5,
     type: 'photo',
-    image: '',
+    image: '/gallery/golden-pampas.jpg',
     title: '鑲金的晚風',
     meta: '火炎山',
     color: '#c8902a',
