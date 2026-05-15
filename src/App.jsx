@@ -1,8 +1,19 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { ArrowUpRight } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { gallery } from './data/gallery.js'
 import Lightbox from './Lightbox.jsx'
 import SignatureBackground from './SignatureBackground.jsx'
+
+// ─── Entrance animation variants ─────────────────────────────────────────────
+const cardContainerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+}
+const cardVariants = {
+  hidden:  { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0,  transition: { duration: 0.6, ease: 'easeOut' } },
+}
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const N              = gallery.length
@@ -198,49 +209,66 @@ export default function App() {
       )}
 
       {/* Rotating arc cards */}
-      {cardStates.map((s, i) => {
-        const { x, y, baseSize, rotation, scale } = s
-        const size   = baseSize * scale
-        const zIndex = Math.round(scale * 10) + 1
-        const work   = gallery[i]
+      <motion.div
+        variants={cardContainerVariants}
+        initial="hidden"
+        animate="visible"
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+      >
+        {cardStates.map((s, i) => {
+          const { x, y, baseSize, rotation, scale } = s
+          const size   = baseSize * scale
+          const zIndex = Math.round(scale * 10) + 1
+          const work   = gallery[i]
 
-        // On mobile, fade out cards behind the avatar area
-        const isActive = isMobile
-          ? !(y > vh * 0.35 && y < vh * 0.5 && Math.abs(x - vw / 2) < 60)
-          : true
+          // On mobile, fade out cards behind the avatar area
+          const isActive = isMobile
+            ? !(y > vh * 0.35 && y < vh * 0.5 && Math.abs(x - vw / 2) < 60)
+            : true
 
-        return (
-          <div key={work.id}
-            onClick={(e) => { e.stopPropagation(); handleCardClick(work) }}
-            style={{
-              position: 'absolute',
-              left: x - size / 2,
-              top:  y - size / 2,
-              width:  size,
-              height: size,
-              borderRadius: Math.round(size * 0.19),
-              background: hexToRgba(work.color, 0.20),
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: work.image ? 0 : size * 0.43,
-              overflow: 'hidden',
-              transform: `rotate(${rotation}deg)`,
-              zIndex,
-              cursor: 'pointer',
-              willChange: 'left, top, width, height',
-              opacity: isActive ? 1 : 0,
-              transition: 'opacity 0.3s ease',
-              boxShadow: scale > 1.15
-                ? `0 ${Math.round(6 * scale)}px ${Math.round(20 * scale)}px rgba(0,0,0,0.13)`
-                : '0 2px 10px rgba(0,0,0,0.07)',
-            }}
-          >
-            {work.image
-              ? <img src={work.image} alt={work.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }} />
-              : work.emoji
-            }
-          </div>
-        )
-      })}
+          return (
+            <motion.div
+              key={work.id}
+              variants={cardVariants}
+              style={{
+                position: 'absolute',
+                left: x - size / 2,
+                top:  y - size / 2,
+                width:  size,
+                height: size,
+                zIndex,
+                willChange: 'left, top, width, height',
+                pointerEvents: 'auto',
+              }}
+            >
+              <div
+                onClick={(e) => { e.stopPropagation(); handleCardClick(work) }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: Math.round(size * 0.19),
+                  background: hexToRgba(work.color, 0.20),
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: work.image ? 0 : size * 0.43,
+                  overflow: 'hidden',
+                  transform: `rotate(${rotation}deg)`,
+                  cursor: 'pointer',
+                  opacity: isActive ? 1 : 0,
+                  transition: 'opacity 0.3s ease',
+                  boxShadow: scale > 1.15
+                    ? `0 ${Math.round(6 * scale)}px ${Math.round(20 * scale)}px rgba(0,0,0,0.13)`
+                    : '0 2px 10px rgba(0,0,0,0.07)',
+                }}
+              >
+                {work.image
+                  ? <img src={work.image} alt={work.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }} />
+                  : work.emoji
+                }
+              </div>
+            </motion.div>
+          )
+        })}
+      </motion.div>
 
       {/* Avatar + brand */}
       <div style={{ position: 'absolute', left: '50%', top: avatarY, transform: 'translate(-50%,-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 15, userSelect: 'none' }}>
