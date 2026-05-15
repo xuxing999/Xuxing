@@ -344,8 +344,8 @@ function PreviewPanel({ work, visible, isMobile, onView }) {
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 9, letterSpacing: '2.5px', color: '#aaa', marginBottom: 4, fontWeight: 500 }}>PREVIEWING</div>
             <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: isMobile ? 18 : 20, color: '#111', marginBottom: 3, lineHeight: 1.2 }}>{work.title}</div>
-            {work.meta && (
-              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: '#777', marginBottom: isMobile ? 10 : 12, fontWeight: 300 }}>{work.meta}</div>
+            {work.desc && (
+              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: '#777', marginBottom: isMobile ? 10 : 12, fontWeight: 300, lineHeight: 1.6 }}>{work.desc}</div>
             )}
             {(work.image || work.video) && (
               <button

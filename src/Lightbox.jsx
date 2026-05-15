@@ -103,10 +103,23 @@ export default function Lightbox({ item, onClose }) {
             <div style={{
               fontFamily: "'DM Sans',sans-serif",
               fontSize: 11,
-              color: '#aaa',
-              fontWeight: 300,
+              color: '#bbb',
+              fontWeight: 400,
+              letterSpacing: '1px',
+              marginBottom: item.desc ? 10 : 0,
             }}>
               {item.meta}
+            </div>
+          )}
+          {item.desc && (
+            <div style={{
+              fontFamily: "'DM Sans',sans-serif",
+              fontSize: 13,
+              color: '#555',
+              fontWeight: 300,
+              lineHeight: 1.75,
+            }}>
+              {item.desc}
             </div>
           )}
         </div>
