@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
+import { ArrowUpRight } from 'lucide-react'
 import { gallery } from './data/gallery.js'
 import Lightbox from './Lightbox.jsx'
 import SignatureBackground from './SignatureBackground.jsx'
@@ -348,29 +349,46 @@ function PreviewPanel({ work, visible, isMobile, onView }) {
               <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: '#777', marginBottom: isMobile ? 10 : 12, fontWeight: 300, lineHeight: 1.6 }}>{work.desc}</div>
             )}
             {(work.image || work.video) && (
-              <button
-                onClick={(e) => { e.stopPropagation(); onView(work) }}
-                style={{
-                  fontFamily: "'DM Sans',sans-serif",
-                  fontSize: 11,
-                  letterSpacing: '1.5px',
-                  color: work.color,
-                  fontWeight: 600,
-                  background: 'none',
-                  border: 'none',
-                  padding: 0,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 4,
-                }}
-              >
-                VIEW ↗
-              </button>
+              <ViewButton onClick={(e) => { e.stopPropagation(); onView(work) }} />
             )}
           </div>
         </div>
       </>)}
     </div>
+  )
+}
+
+function ViewButton({ onClick }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        fontFamily: "'DM Sans',sans-serif",
+        fontSize: 11,
+        letterSpacing: '1.5px',
+        color: hovered ? '#cafd00' : '#737373',
+        fontWeight: 600,
+        background: 'none',
+        border: 'none',
+        padding: 0,
+        cursor: 'pointer',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 4,
+        transition: 'color 0.2s ease',
+      }}
+    >
+      VIEW
+      <ArrowUpRight
+        size={16}
+        style={{
+          transition: 'transform 0.2s ease, color 0.2s ease',
+          transform: hovered ? 'translate(2px, -2px)' : 'translate(0, 0)',
+        }}
+      />
+    </button>
   )
 }
