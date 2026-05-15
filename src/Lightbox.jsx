@@ -30,8 +30,6 @@ export default function Lightbox({ item, onClose }) {
 
   if (!item) return null
 
-  const isClosing = closing
-
   return (
     <div
       role="dialog"
@@ -41,128 +39,127 @@ export default function Lightbox({ item, onClose }) {
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(0,0,0,0.85)',
+        background: 'rgba(0,0,0,0.88)',
         zIndex: 50,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        animation: isClosing
+        animation: closing
           ? 'lb-backdrop-out 0.22s ease-in forwards'
           : 'lb-backdrop-in 0.2s ease-out',
       }}
     >
-      {/* ── Photo container — fills viewport with slight desktop breathing room ── */}
+      {/* ── Wrapper column: photo + text below ── */}
       <div
-        className="lb-container"
         onClick={(e) => e.stopPropagation()}
         style={{
-          position: 'relative',
-          overflow: 'hidden',
-          flexShrink: 0,
-          animation: isClosing
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: 'min(520px, 92vw)',
+          maxHeight: '92dvh',
+          animation: closing
             ? 'lb-card-out 0.22s ease-in forwards'
             : 'lb-card-in 0.3s ease-out',
         }}
       >
-        {/* Loading placeholder */}
+        {/* ── Photo ── */}
         <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(255,255,255,0.04)',
-          opacity: imgLoaded ? 0 : 1,
-          transition: 'opacity 0.4s ease',
-          pointerEvents: 'none',
-          zIndex: 1,
-        }} />
-
-        {/* ── Media ── */}
-        {item.type === 'video' ? (
-          <video
-            src={item.video}
-            poster={item.image || undefined}
-            controls
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          />
-        ) : (
-          <img
-            src={item.image}
-            alt={item.title}
-            onLoad={() => setLoadedItemId(item.id)}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block',
-              opacity: imgLoaded ? 1 : 0,
-              transition: 'opacity 0.35s ease',
-            }}
-          />
-        )}
-
-        {/* ── Top bar ── */}
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, right: 0,
-          padding: '20px 22px',
-          zIndex: 3,
-          animation: isClosing
-            ? 'lb-text-out 0.18s ease-in forwards'
-            : 'lb-text-in 0.28s 0.22s ease-out both',
+          position: 'relative',
+          width: '100%',
+          borderRadius: 16,
+          overflow: 'hidden',
+          flexShrink: 1,
+          minHeight: 0,
         }}>
-          <span style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 9,
-            letterSpacing: '3.5px',
-            color: 'rgba(255,255,255,0.45)',
-            fontWeight: 500,
-          }}>
-            {item.type === 'video' ? 'VIDEO' : 'PHOTO'}
-          </span>
+          {/* Loading placeholder */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'rgba(255,255,255,0.04)',
+            opacity: imgLoaded ? 0 : 1,
+            transition: 'opacity 0.4s ease',
+            pointerEvents: 'none',
+          }} />
+
+          {item.type === 'video' ? (
+            <video
+              src={item.video}
+              poster={item.image || undefined}
+              controls
+              style={{ width: '100%', display: 'block', maxHeight: '68dvh', objectFit: 'contain' }}
+            />
+          ) : (
+            <img
+              src={item.image}
+              alt={item.title}
+              onLoad={() => setLoadedItemId(item.id)}
+              style={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: '68dvh',
+                display: 'block',
+                opacity: imgLoaded ? 1 : 0,
+                transition: 'opacity 0.35s ease',
+              }}
+            />
+          )}
         </div>
 
-        {/* ── Bottom gradient ── */}
+        {/* ── Text below photo ── */}
         <div style={{
-          position: 'absolute',
-          bottom: 0, left: 0, right: 0,
-          height: '40%',
-          background: 'linear-gradient(to top, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)',
-          pointerEvents: 'none',
-          zIndex: 2,
-        }} />
-
-        {/* ── Bottom text: title + meta only ── */}
-        <div style={{
-          position: 'absolute',
-          bottom: 0, left: 0, right: 0,
-          padding: '0 32px 32px',
+          width: '100%',
+          padding: '18px 4px 4px',
           textAlign: 'center',
-          zIndex: 3,
-          animation: isClosing
+          flexShrink: 0,
+          animation: closing
             ? 'lb-text-out 0.18s ease-in forwards'
-            : 'lb-text-in 0.3s 0.22s ease-out both',
+            : 'lb-text-in 0.3s 0.18s ease-out both',
         }}>
+          <div style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 9,
+            letterSpacing: '3px',
+            color: 'rgba(255,255,255,0.35)',
+            fontWeight: 500,
+            marginBottom: 8,
+          }}>
+            {item.type === 'video' ? 'VIDEO' : 'PHOTO'}
+          </div>
+          <div style={{
+            fontFamily: "'DM Serif Display', serif",
+            fontSize: 'clamp(20px, 4vw, 26px)',
+            color: '#fff',
+            lineHeight: 1.2,
+            marginBottom: item.meta ? 6 : 0,
+          }}>
+            {item.title}
+          </div>
           {item.meta && (
             <div style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: 10,
-              letterSpacing: '2.5px',
-              color: 'rgba(255,255,255,0.55)',
-              fontWeight: 400,
-              marginBottom: 8,
-              textShadow: '0 1px 6px rgba(0,0,0,0.5)',
+              fontSize: 11,
+              letterSpacing: '1.5px',
+              color: 'rgba(255,255,255,0.45)',
+              fontWeight: 300,
+              marginBottom: item.desc ? 10 : 0,
             }}>
               {item.meta}
             </div>
           )}
-          <div style={{
-            fontFamily: "'DM Serif Display', serif",
-            fontSize: 'clamp(24px, 4vw, 32px)',
-            color: '#fff',
-            lineHeight: 1.15,
-            textShadow: '0 1px 12px rgba(0,0,0,0.5)',
-          }}>
-            {item.title}
-          </div>
+          {item.desc && (
+            <div style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 12,
+              color: 'rgba(255,255,255,0.55)',
+              fontWeight: 300,
+              lineHeight: 1.78,
+              maxWidth: '88%',
+              margin: '0 auto',
+            }}>
+              {item.desc}
+            </div>
+          )}
         </div>
       </div>
 
@@ -176,7 +173,7 @@ export default function Lightbox({ item, onClose }) {
           top: 20, right: 20,
           width: 36, height: 36,
           borderRadius: '50%',
-          background: 'rgba(255,255,255,0.15)',
+          background: 'rgba(255,255,255,0.12)',
           border: 'none',
           cursor: 'pointer',
           fontSize: 15,
@@ -187,44 +184,17 @@ export default function Lightbox({ item, onClose }) {
           transition: 'background 0.18s',
           zIndex: 51,
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.28)' }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)' }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.24)' }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)' }}
       >✕</button>
 
       <style>{`
-        /* Responsive container sizing */
-        .lb-container {
-          width: calc(100vw - 64px);
-          height: calc(100dvh - 64px);
-          max-width: 820px;
-          border-radius: 18px;
-        }
-        @media (max-width: 767px) {
-          .lb-container {
-            width: 100vw;
-            height: 100dvh;
-            border-radius: 0;
-          }
-        }
-
         @keyframes lb-backdrop-in  { from { opacity: 0 } to { opacity: 1 } }
         @keyframes lb-backdrop-out { from { opacity: 1 } to { opacity: 0 } }
-        @keyframes lb-card-in  {
-          from { opacity: 0; transform: scale(0.97); }
-          to   { opacity: 1; transform: scale(1); }
-        }
-        @keyframes lb-card-out {
-          from { opacity: 1; transform: scale(1); }
-          to   { opacity: 0; transform: scale(0.97); }
-        }
-        @keyframes lb-text-in {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes lb-text-out {
-          from { opacity: 1; transform: translateY(0); }
-          to   { opacity: 0; transform: translateY(6px); }
-        }
+        @keyframes lb-card-in  { from { opacity: 0; transform: scale(0.97) } to { opacity: 1; transform: scale(1) } }
+        @keyframes lb-card-out { from { opacity: 1; transform: scale(1) }   to { opacity: 0; transform: scale(0.97) } }
+        @keyframes lb-text-in  { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: translateY(0) } }
+        @keyframes lb-text-out { from { opacity: 1; transform: translateY(0) }   to { opacity: 0; transform: translateY(4px) } }
       `}</style>
     </div>
   )
