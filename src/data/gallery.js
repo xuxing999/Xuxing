@@ -75,8 +75,19 @@ export const gallery = [
     color: '#1a1a3a',
   },
 
+  {
+    id: 8,
+    type: 'video',
+    image: '/gallery/wind-footprints-thumb.jpg',
+    video: '/gallery/wind-footprints.mp4',
+    title: '風的腳印',
+    desc: '你看不見風，卻能看見它走過的痕跡。稻浪一波接著一波，那是風在大地上留下的字跡。',
+    meta: '忘憂谷',
+    color: '#5a7a4a',
+  },
+
   // ── 佔位（維持旋轉不斷層，之後替換）────────────────────────────────────
-  { id: 8,  type: 'photo', image: '', title: '', desc: '', meta: '', color: '#a09890' },
+  { id: 9,  type: 'photo', image: '', title: '', desc: '', meta: '', color: '#a09890' },
   { id: 9,  type: 'photo', image: '', title: '', desc: '', meta: '', color: '#a09890' },
   { id: 10, type: 'photo', image: '', title: '', desc: '', meta: '', color: '#a09890' },
   { id: 11, type: 'photo', image: '', title: '', desc: '', meta: '', color: '#a09890' },
