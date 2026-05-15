@@ -164,16 +164,16 @@ export default function App() {
   }, [])
 
   const handleCardClick = (work) => {
-    if (!work.image && !work.video) return   // skip empty placeholder cards
+    const isEmpty = !work.image && !work.video
     if (isMobile) {
       if (previewWork?.id === work.id && previewVisible) {
-        setLightboxItem(work)
+        if (!isEmpty) setLightboxItem(work)   // don't open lightbox for placeholders
       } else {
         setPreviewWork(work)
         setPreviewVisible(true)
       }
     } else {
-      setLightboxItem(work)
+      if (!isEmpty) setLightboxItem(work)
     }
   }
 
